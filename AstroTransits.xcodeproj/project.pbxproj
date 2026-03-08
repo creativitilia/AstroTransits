@@ -18,6 +18,8 @@
 		759091932F5D7B8D0053F2E6 /* Transit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transit.swift; sourceTree = "<group>"; };
 		759091A52F5D7E510053F2E6 /* AstronomyEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyEngine.swift; sourceTree = "<group>"; };
 		759091A62F5D7E730053F2E6 /* TransitEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitEngine.swift; sourceTree = "<group>"; };
+		759091A82F5D7F490053F2E6 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		759091A92F5D7F530053F2E6 /* TransitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -42,8 +44,9 @@
 		759091752F5D779A0053F2E6 = {
 			isa = PBXGroup;
 			children = (
-				759091A42F5D7E370053F2E6 /* Engine */,
 				7590918E2F5D7B550053F2E6 /* Models */,
+				759091A42F5D7E370053F2E6 /* Engine */,
+				759091A72F5D7F340053F2E6 /* ViewModels */,
 				759091802F5D779A0053F2E6 /* AstroTransits */,
 				7590917F2F5D779A0053F2E6 /* Products */,
 			);
@@ -75,6 +78,15 @@
 				759091A52F5D7E510053F2E6 /* AstronomyEngine.swift */,
 			);
 			path = Engine;
+			sourceTree = "<group>";
+		};
+		759091A72F5D7F340053F2E6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				759091A92F5D7F530053F2E6 /* TransitViewModel.swift */,
+				759091A82F5D7F490053F2E6 /* AppViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
