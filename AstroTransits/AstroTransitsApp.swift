@@ -1,32 +1,21 @@
-//
-//  AstroTransitsApp.swift
-//  AstroTransits
-//
-//  Created by Majdouline on 08/03/2026.
-//
-
 import SwiftUI
-import SwiftData
 
 @main
 struct AstroTransitsApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    
+    @StateObject private var appViewModel = AppViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if appViewModel.isOnboarded {
+                // We'll build this in Step 6
+                Text("Home screen coming soon")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black)
+            } else {
+                OnboardingView(appViewModel: appViewModel)
+            }
         }
-        .modelContainer(sharedModelContainer)
     }
 }
