@@ -16,6 +16,8 @@
 		759091912F5D7B7B0053F2E6 /* Aspect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aspect.swift; sourceTree = "<group>"; };
 		759091922F5D7B820053F2E6 /* NatalChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NatalChart.swift; sourceTree = "<group>"; };
 		759091932F5D7B8D0053F2E6 /* Transit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transit.swift; sourceTree = "<group>"; };
+		759091A52F5D7E510053F2E6 /* AstronomyEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronomyEngine.swift; sourceTree = "<group>"; };
+		759091A62F5D7E730053F2E6 /* TransitEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitEngine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,6 +42,7 @@
 		759091752F5D779A0053F2E6 = {
 			isa = PBXGroup;
 			children = (
+				759091A42F5D7E370053F2E6 /* Engine */,
 				7590918E2F5D7B550053F2E6 /* Models */,
 				759091802F5D779A0053F2E6 /* AstroTransits */,
 				7590917F2F5D779A0053F2E6 /* Products */,
@@ -63,6 +66,15 @@
 				7590918F2F5D7B770053F2E6 /* Planet.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		759091A42F5D7E370053F2E6 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				759091A62F5D7E730053F2E6 /* TransitEngine.swift */,
+				759091A52F5D7E510053F2E6 /* AstronomyEngine.swift */,
+			);
+			path = Engine;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
