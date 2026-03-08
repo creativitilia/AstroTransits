@@ -1,10 +1,9 @@
 import SwiftUI
+import MapKit
 
 struct OnboardingView: View {
     
     @ObservedObject var appViewModel: AppViewModel
-    
-    // Controls which section is currently expanded
     @State private var currentStep: OnboardingStep = .date
     @State private var animateIn: Bool = false
     
@@ -21,18 +20,15 @@ struct OnboardingView: View {
             )
             .ignoresSafeArea()
             
-            // Stars background layer
             StarsBackgroundView()
             
             ScrollView {
                 VStack(spacing: 32) {
                     
-                    // MARK: - Header
                     headerSection
                         .opacity(animateIn ? 1 : 0)
                         .offset(y: animateIn ? 0 : -20)
                     
-                    // MARK: - Form Cards
                     VStack(spacing: 16) {
                         dateCard
                         timeCard
@@ -41,7 +37,6 @@ struct OnboardingView: View {
                     .opacity(animateIn ? 1 : 0)
                     .offset(y: animateIn ? 0 : 30)
                     
-                    // MARK: - Error Message
                     if let error = appViewModel.errorMessage {
                         Text(error)
                             .font(.footnote)
@@ -50,7 +45,6 @@ struct OnboardingView: View {
                             .multilineTextAlignment(.center)
                     }
                     
-                    // MARK: - Submit Button
                     submitButton
                         .opacity(animateIn ? 1 : 0)
                     
@@ -89,11 +83,7 @@ struct OnboardingView: View {
     
     // MARK: - Date Card
     private var dateCard: some View {
-        FormCard(
-            icon: "calendar",
-            title: "Birth Date",
-            isActive: currentStep == .date
-        ) {
+        FormCard(icon: "calendar", title: "Birth Date", isActive: currentStep == .date) {
             DatePicker(
                 "",
                 selection: $appViewModel.birthDate,
@@ -110,11 +100,7 @@ struct OnboardingView: View {
     
     // MARK: - Time Card
     private var timeCard: some View {
-        FormCard(
-            icon: "clock",
-            title: "Birth Time",
-            isActive: currentStep == .time
-        ) {
+        FormCard(icon: "clock", title: "Birth Time", isActive: currentStep == .time) {
             DatePicker(
                 "",
                 selection: $appViewModel.birthTime,
@@ -136,18 +122,13 @@ struct OnboardingView: View {
     
     // MARK: - City Card
     private var cityCard: some View {
-        FormCard(
-            icon: "mappin.circle",
-            title: "Birth City",
-            isActive: currentStep == .city
-        ) {
+        FormCard(icon: "mappin.circle", title: "Birth City", isActive: currentStep == .city) {
             TextField("e.g. Paris, London, New York", text: $appViewModel.birthCity)
                 .textFieldStyle(.plain)
                 .foregroundColor(.white)
                 .font(.system(size: 16, weight: .light))
                 .multilineTextAlignment(.center)
                 .padding(.vertical, 8)
-                .onTapGesture { currentStep = .city }
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.words)
         }
@@ -195,17 +176,22 @@ struct OnboardingView: View {
     }
 }
 
-// MARK: - Form Card Component
-// A reusable dark card that wraps each form section
+// MARK: - Form Card
 struct FormCard<Content: View>: View {
     let icon: String
     let title: String
     let isActive: Bool
-    @ViewBuilder let content: Content
+    @ViewBuilder let content: () -> Content
+    
+    init(icon: String, title: String, isActive: Bool, @ViewBuilder content: @escaping () -> Content) {
+        self.icon = icon
+        self.title = title
+        self.isActive = isActive
+        self.content = content
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Card header
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 13))
@@ -219,7 +205,6 @@ struct FormCard<Content: View>: View {
                 
                 Spacer()
                 
-                // Active indicator dot
                 if isActive {
                     Circle()
                         .fill(Color.purple)
@@ -227,13 +212,11 @@ struct FormCard<Content: View>: View {
                 }
             }
             
-            // Divider
             Rectangle()
                 .fill(isActive ? Color.purple.opacity(0.5) : Color.white.opacity(0.08))
                 .frame(height: 1)
             
-            // The actual form content (DatePicker, TextField, etc.)
-            content
+            content()
         }
         .padding(20)
         .background(
@@ -252,13 +235,57 @@ struct FormCard<Content: View>: View {
 }
 
 // MARK: - Stars Background
-// Simple decorative stars scattered behind the form
+struct StarData {
+    let x: CGFloat
+    let y: CGFloat
+    let size: CGFloat
+    let opacity: CGFloat
+}
+
 struct StarsBackgroundView: View {
     
-    // Pre-generated star positions so they don't move on redraw
-    private let stars: [(x: CGFloat, y: CGFloat, size: CGFloat, opacity: CGFloat)] = {
-        var result: [(CGFloat, CGFloat, CGFloat, CGFloat)] = []
-        // Use a fixed seed pattern for consistent placement
+    private let stars: [StarData] = {
         let positions: [(CGFloat, CGFloat)] = [
             (0.1, 0.05), (0.9, 0.08), (0.3, 0.12), (0.7, 0.15),
-            (0.5, 0.03), (0.2, 0.20), (0.8,
+            (0.5, 0.03), (0.2, 0.20), (0.8, 0.22), (0.4, 0.28),
+            (0.6, 0.18), (0.15, 0.35), (0.85, 0.32), (0.55, 0.40),
+            (0.25, 0.45), (0.75, 0.48), (0.45, 0.55), (0.05, 0.60),
+            (0.95, 0.58), (0.35, 0.65), (0.65, 0.70), (0.50, 0.75),
+            (0.10, 0.80), (0.90, 0.82), (0.30, 0.88), (0.70, 0.92),
+            (0.20, 0.95), (0.80, 0.97), (0.60, 0.85), (0.40, 0.90)
+        ]
+        // Use fixed values instead of random so stars don't shift on redraw
+        let sizes:    [CGFloat] = [1,2,3,1,2,1,3,2,1,2,3,1,2,1,3,2,1,2,3,1,2,3,1,2,3,1,2,3]
+        let opacities:[CGFloat] = [0.4,0.6,0.3,0.5,0.7,0.3,0.5,0.4,0.6,0.3,0.5,0.7,0.4,0.6,0.3,0.5,0.4,0.6,0.3,0.5,0.4,0.3,0.6,0.5,0.4,0.7,0.3,0.5]
+        
+        return positions.enumerated().map { i, pos in
+            StarData(x: pos.0, y: pos.1, size: sizes[i], opacity: opacities[i])
+        }
+    }()
+    
+    var body: some View {
+        GeometryReader { geo in
+            ForEach(0..<stars.count, id: \.self) { i in
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: stars[i].size, height: stars[i].size)
+                    .opacity(stars[i].opacity)
+                    .position(
+                        x: stars[i].x * geo.size.width,
+                        y: stars[i].y * geo.size.height
+                    )
+            }
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+    }
+}
+
+// MARK: - Onboarding Steps
+enum OnboardingStep {
+    case date, time, city
+}
+
+#Preview {
+    OnboardingView(appViewModel: AppViewModel())
+}
